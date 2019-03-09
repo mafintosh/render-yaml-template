@@ -1,6 +1,6 @@
 {
   "name": "render-yaml-template",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "Renders an input dir that contains a config.yml template to a series of output dirs",
   "main": "bin.js",
   "dependencies": {

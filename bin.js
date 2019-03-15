@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 
-const yaml = require('yaml')
 const tar = require('tar-fs')
 const tree = require('fs-tree-iterator')
 const fs = require('fs')
 const path = require('path')
 const format = require('streaming-format')
+const parse = require('./parse-yaml')
 
 const input = process.argv[2]
 const output = process.argv[3]
@@ -22,9 +22,7 @@ ite.next(function loop (err, node) {
   if (!node) throw new Error('config.yml not found')
 
   if (node.path.endsWith('config.yml')) {
-    const { variables } = yaml.parse(fs.readFileSync(node.path, 'utf-8'))
-    const perms = permutations(variables)
-    perms.forEach(render)
+    parse(fs.readFileSync(node.path, 'utf-8')).forEach(render)
     return
   }
 
@@ -45,24 +43,4 @@ function render (vars, i) {
     header.name = header.name.replace(/\{\{([^}]+)\}\}/, (input, name) => vars[name] || input)
     return header
   }
-}
-
-function permutations (vars) {
-  const names = Object.keys(vars)
-  if (!names.length) return []
-
-  const res = [ ]
-  const cnt = vars[names[0]].args.length
-
-  for (let i = 0; i < cnt; i++) {
-    const entry = {}
-
-    for (const name of names) {
-      entry[name] = vars[name].args[i]
-    }
-
-    res.push(entry)
-  }
-
-  return res
 }

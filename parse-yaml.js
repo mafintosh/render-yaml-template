@@ -5,7 +5,7 @@ module.exports = parse
 function parse (src) {
   const p = yaml.parse(src)
   const entries = [ ]
-  visit('', p.variables || {}, entries, null)
+  visit('', (p && p.variables) || {}, entries, null)
   return entries.length ? entries : [ {} ]
 }
 

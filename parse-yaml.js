@@ -3,10 +3,10 @@ const yaml = require('yaml')
 module.exports = parse
 
 function parse (src) {
-  const { variables } = yaml.parse(src)
+  const p = yaml.parse(src)
   const entries = [ ]
-  visit('', variables, entries, null)
-  return entries
+  visit('', p.variables || {}, entries, null)
+  return entries.length ? entries : [ {} ]
 }
 
 function visit (prefix, v, entries, res) {
